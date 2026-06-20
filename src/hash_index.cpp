@@ -75,7 +75,8 @@ void HashIndex::save()const{
     for(int i=0;i<BUCKET_COUNT;i++){
         IndexNode*curr=buckets[i];
         while(curr!=nullptr){
-            file<<curr->key<<" "<<curr->page_id<<"\n";
+            file<<curr->key<<" "<<curr->page_id<<"\n";//we doesnt store group of hashindex wise bcz later inserting in this 
+                                                        // same order however creates same hsash structure
             curr=curr->next;
         }
     }

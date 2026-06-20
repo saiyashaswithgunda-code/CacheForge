@@ -8,4 +8,6 @@ add_executable(cacheforge
     src/disk_manager.cpp
     src/page.cpp
     src/hash_index.cpp
+    src/wal.cpp
+    src/storage_engine.cpp
 )
