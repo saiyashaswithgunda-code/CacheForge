@@ -24,6 +24,7 @@ public:
     Page& getPage(int page_id);
     void  pinPage(int page_id, const Page& page);
     void  markDirty(int page_id);
+    void flushAll();
 
 private:
     void evict();

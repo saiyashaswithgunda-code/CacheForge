@@ -11,6 +11,7 @@ StorageEngine::StorageEngine(const std::string& db_path,
 }
 
 StorageEngine::~StorageEngine() {
+    buffer_pool.flushAll();
     delete wal;
 }
 
@@ -29,8 +30,8 @@ void StorageEngine::set(const std::string& key, const std::string& value) {
     p.write(offset, (char*)&vlen, sizeof(int)); offset += sizeof(int);
     p.write(offset, value.c_str(), vlen);
 
-    disk_manager.writePage(p);
     buffer_pool.pinPage(pid,p);
+    buffer_pool.markDirty(pid);
     hash_index.insert(key, pid);
     hash_index.save();
 

@@ -7,7 +7,7 @@ BufferPool::BufferPool(int cap, DiskManager& dm)
 Page& BufferPool::getPage(int page_id) {
     // Cache hit — page already in memory
     if (page_map.find(page_id) != page_map.end()) {
-        std::cout << "[BufferPool] Cache HIT  — page " 
+        std::cout << "[BufferPool] Cache HIT — page " 
                   << page_id << std::endl;
 
         // Move to front — most recently used
@@ -77,4 +77,14 @@ void BufferPool::evict() {
 
     page_map.erase(evicted_page_id);
     lru_list.pop_back();
+}
+void BufferPool::flushAll() {
+    for (auto& entry : lru_list) {
+        if (entry.second.is_dirty) {
+            std::cout << "[BufferPool] Flushing dirty page "
+                      << entry.first << " to disk" << std::endl;
+            disk_manager.writePage(entry.second);
+            entry.second.is_dirty = false;
+        }
+    }
 }
