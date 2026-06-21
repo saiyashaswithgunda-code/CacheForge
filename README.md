@@ -4,7 +4,6 @@ A LevelDB inspired persistent key-value storage engine built from scratch in C++
 Built to understand storage engine internals by implementing concepts such as write-ahead logging, page-based storage, buffer pool management, indexing, and compaction.
 
 ---
-
 ## Architecture
 
 ```text
@@ -26,7 +25,7 @@ HashIndex WAL BufferPool(LRU)
           |
           v
   cacheforge.db
-
+```
 ---
 
 ## Features
@@ -98,52 +97,37 @@ cd ..
 ```
 
 ---
-
 ## CLI Commands
+
+```text
 CacheForge> SET <key> <value>   store a key-value pair
-
 CacheForge> GET <key>           retrieve a value
-
 CacheForge> DELETE <key>        delete a key
-
 CacheForge> BENCH               run performance benchmark
-
 CacheForge> COMPACT             remove orphaned pages, shrink db
-
 CacheForge> HELP                show all commands
-
 CacheForge> EXIT                exit CacheForge
+```
 
 ---
-
 ## Project Structure
+
+```text
 CacheForge/
-
 ├── src/
-
-│   ├── page.h / page.cpp               4KB memory page representation
-
-│   ├── disk_manager.h / .cpp           binary file I/O, page read/write
-
-│   ├── hash_index.h / .cpp             persistent hash index with chaining
-
-│   ├── wal.h / .cpp                    write-ahead log, crash recovery
-
-│   ├── buffer_pool.h / .cpp            LRU cache, dirty page writeback
-
-│   ├── storage_engine.h / .cpp         unified interface across all layers
-
-│   └── main.cpp                        interactive CLI/REPL
-
+│   ├── page.h / page.cpp
+│   ├── disk_manager.h / .cpp
+│   ├── hash_index.h / .cpp
+│   ├── wal.h / .cpp
+│   ├── buffer_pool.h / .cpp
+│   ├── storage_engine.h / .cpp
+│   └── main.cpp
 ├── data/
-
-│   ├── cacheforge.db                   binary page storage
-
-│   ├── index.dat                       persisted hash index
-
-│   └── wal.log                         write-ahead log
-
+│   ├── cacheforge.db
+│   ├── index.dat
+│   └── wal.log
 └── CMakeLists.txt
+```
 ---
 
 ## How WAL Crash Recovery Works
