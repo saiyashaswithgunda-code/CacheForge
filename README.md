@@ -2,18 +2,30 @@
 A LevelDB inspired persistent key-value storage engine built from scratch in C++ without any external libraries.
 
 Built to understand storage engine internals by implementing concepts such as write-ahead logging, page-based storage, buffer pool management, indexing, and compaction.
+
 ---
 
 ## Architecture
-            CLI / REPL
-                |
-    StorageEngine(unified interface)
-    /           |           \
-HashIndex      WAL      BufferPool (LRU)
-    \           |            /
-            DiskManager
-                |
-      cacheforge.db(binary file)
+
+```text
++-----------+
+| CLI / REPL|
++-----------+
+      |
+      v
++-------------------+
+|   StorageEngine   |
++-------------------+
+   /      |      \
+  v       v       v
+HashIndex WAL BufferPool(LRU)
+    \      |      /
+     \     |     /
+      v    v    v
+     DiskManager
+          |
+          v
+  cacheforge.db
 
 ---
 
