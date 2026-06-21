@@ -7,8 +7,7 @@ BufferPool::BufferPool(int cap, DiskManager& dm)
 Page& BufferPool::getPage(int page_id) {
     // Cache hit — page already in memory
     if (page_map.find(page_id) != page_map.end()) {
-        std::cout << "[BufferPool] Cache HIT — page " 
-                  << page_id << std::endl;
+        // std::cout << "[BufferPool] Cache HIT — page "<< page_id << std::endl;
 
         // Move to front — most recently used
         auto it = page_map[page_id];
@@ -17,8 +16,7 @@ Page& BufferPool::getPage(int page_id) {
         return lru_list.front().second;
     }
 
-    std::cout << "[BufferPool] Cache MISS — page "
-              << page_id << ", loading from disk" << std::endl;
+    // std::cout << "[BufferPool] Cache MISS — page "<< page_id << ", loading from disk" << std::endl;
 
     // Cache miss — load from disk
     if (lru_list.size() >= capacity) {
@@ -66,13 +64,10 @@ void BufferPool::evict() {
 
     // If dirty — write back to disk before evicting
     if (evicted_page.is_dirty) {
-        std::cout << "[BufferPool] Evicting dirty page "
-                  << evicted_page_id
-                  << " — writing to disk first" << std::endl;
+        // std::cout << "[BufferPool] Evicting dirty page "<< evicted_page_id<< " — writing to disk first" << std::endl;
         disk_manager.writePage(evicted_page);
     } else {
-        std::cout << "[BufferPool] Evicting clean page "
-                  << evicted_page_id << std::endl;
+        // std::cout << "[BufferPool] Evicting clean page "<< evicted_page_id << std::endl;
     }
 
     page_map.erase(evicted_page_id);
@@ -81,8 +76,7 @@ void BufferPool::evict() {
 void BufferPool::flushAll() {
     for (auto& entry : lru_list) {
         if (entry.second.is_dirty) {
-            std::cout << "[BufferPool] Flushing dirty page "
-                      << entry.first << " to disk" << std::endl;
+            // std::cout << "[BufferPool] Flushing dirty page "<< entry.first << " to disk" << std::endl;
             disk_manager.writePage(entry.second);
             entry.second.is_dirty = false;
         }

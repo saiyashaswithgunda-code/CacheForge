@@ -18,6 +18,22 @@ public:
     HashIndex(const std::string& path);
     ~HashIndex();
 
+    HashIndex& operator=(const HashIndex& other) {
+        // clean up existing nodes
+        for (int i = 0; i < BUCKET_COUNT; i++) {
+            IndexNode* curr = buckets[i];
+            while (curr) {
+                IndexNode* next = curr->next;
+                delete curr;
+                curr = next;
+            }
+            buckets[i] = nullptr;
+        }
+        index_file_path = other.index_file_path;
+        load();
+        return *this;
+    }
+
     void insert(const std::string& key,int page_id);
     int get(const std::string& key)const;
     void remove(const std::string& key);
