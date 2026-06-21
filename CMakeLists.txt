@@ -10,4 +10,5 @@ add_executable(cacheforge
     src/hash_index.cpp
     src/wal.cpp
     src/storage_engine.cpp
+    src/buffer_pool.cpp
 )

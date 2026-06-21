@@ -5,7 +5,7 @@
 StorageEngine::StorageEngine(const std::string& db_path,
                              const std::string& index_path,
                              const std::string& wal_path)
-    : disk_manager(db_path), hash_index(index_path) {
+    : disk_manager(db_path), hash_index(index_path),buffer_pool(3,disk_manager){
     wal = new WAL(wal_path);
     wal->replay(*this); // replay incomplete operations on startup
 }
@@ -30,6 +30,7 @@ void StorageEngine::set(const std::string& key, const std::string& value) {
     p.write(offset, value.c_str(), vlen);
 
     disk_manager.writePage(p);
+    buffer_pool.pinPage(pid,p);
     hash_index.insert(key, pid);
     hash_index.save();
 
@@ -40,8 +41,7 @@ std::string StorageEngine::get(const std::string& key) {
     int pid = hash_index.get(key);
     if (pid == -1) return "KEY NOT FOUND";
 
-    Page p(pid);
-    disk_manager.readPage(pid, p);
+    Page& p=buffer_pool.getPage(pid);
 
     int offset = 0, klen, vlen;
     p.read(offset, (char*)&klen, sizeof(int)); offset += sizeof(int);
