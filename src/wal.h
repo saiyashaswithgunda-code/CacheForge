@@ -30,4 +30,5 @@ public:
                  const std::string& key,
                  const std::string& value);
     void replay(class StorageEngine& engine);
+    void truncate();
 };

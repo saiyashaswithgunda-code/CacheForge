@@ -73,6 +73,18 @@ void BufferPool::evict() {
     page_map.erase(evicted_page_id);
     lru_list.pop_back();
 }
+
+void BufferPool::evictPage(int page_id) {
+    auto it = page_map.find(page_id);
+    if (it == page_map.end()) {
+        return; // page not in buffer pool, nothing to do
+    }
+    auto list_it = it->second;
+    
+    lru_list.erase(list_it);// (no point writing deleted data to disk)
+    page_map.erase(it);// If the page is dirty, we are deleting it anyway so just removing it 
+}
+
 void BufferPool::flushAll() {
     for (auto& entry : lru_list) {
         if (entry.second.is_dirty) {

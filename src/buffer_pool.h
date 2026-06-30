@@ -24,6 +24,7 @@ public:
     Page& getPage(int page_id);
     void  pinPage(int page_id, const Page& page);
     void  markDirty(int page_id);
+    void evictPage(int page_id);//to evict a specific page in buffer if the operation says to delete the key value pair
     void flushAll();
 
 private:

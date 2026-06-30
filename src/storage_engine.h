@@ -13,7 +13,11 @@ private:
     BufferPool   buffer_pool;
     WAL*         wal;//here we use WAL* pointer bcz at this point we only know a WAL class exists 
                     // but we dont know its elements so we cant assign the storage for it here itself so we use ptr which is of same size always 
+    int op_count_since_checkpoint;
+    static const int CHECKPOINT_INTERVAL = 100;
 
+    void checkpoint();
+    
 public:
     StorageEngine(const std::string& db_path,
                   const std::string& index_path,
